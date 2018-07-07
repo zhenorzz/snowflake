@@ -37,16 +37,16 @@ import (
 
 func main() {
 
-	// Create a new Node with a Node number of 1
-	sf, err := snowflake.New(1)
+    // Create a new Node with a Node number of 1
+    sf, err := snowflake.New(1)
     if err != nil {
         panic(err)
     }
 
-	// Generate a snowflake ID.
-	uuid := sf.Generate()
+    // Generate a snowflake ID.
+    uuid := sf.Generate()
 
-	// Print
-	fmt.Println(uuid)
+    // Print
+    fmt.Println(uuid)
 }
 ```
