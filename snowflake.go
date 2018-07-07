@@ -1,3 +1,7 @@
+// Package snowflake provides a very simple Twitter snowflake generator and parser.
+// +-------------------------------------------------------+
+// | 42 Bit Timestamp | 10 Bit WorkID | 12 Bit Sequence ID |
+// +-------------------------------------------------------+
 package snowflake
 
 import (
@@ -32,6 +36,7 @@ func (sf *SnowFlake) pack() uint64 {
 	return uuid
 }
 
+// New returns a new snowflake node that can be used to generate snowflake
 func New(workerId uint32) (*SnowFlake, error) {
 	if workerId < 0 || workerId > MaxWorkId {
 		return nil, errors.New("invalid worker Id")
@@ -39,7 +44,8 @@ func New(workerId uint32) (*SnowFlake, error) {
 	return &SnowFlake{workerId: workerId}, nil
 }
 
-func (sf *SnowFlake) Next() (uint64, error) {
+// Next creates and returns a unique snowflake ID
+func (sf *SnowFlake) Generate() (uint64, error) {
 	sf.lock.Lock()
 	defer sf.lock.Unlock()
 
@@ -61,6 +67,8 @@ func (sf *SnowFlake) Next() (uint64, error) {
 	return sf.pack(), nil
 }
 
+// waitNextMilli if that microsecond is full
+// wait for the next microsecond
 func (sf *SnowFlake) waitNextMilli(ts uint64) uint64 {
 	for ts == sf.lastTimestamp {
 		time.Sleep(100 * time.Microsecond)
@@ -69,6 +77,7 @@ func (sf *SnowFlake) waitNextMilli(ts uint64) uint64 {
 	return ts
 }
 
+// timestamp
 func timestamp() uint64 {
 	return uint64(time.Now().UnixNano()/int64(1000000) - epoch)
 }
