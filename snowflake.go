@@ -32,7 +32,6 @@ type SnowFlake struct {
 
 func (sf *SnowFlake) pack() uint64 {
 	uuid := (sf.lastTimestamp << (numWorkerBits + numSequenceBits)) | (uint64(sf.workerId) << numSequenceBits) | (uint64(sf.sequence))
-	fmt.Println(uuid)
 	return uuid
 }
 
